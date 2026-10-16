@@ -7,6 +7,7 @@ add_library(${module_name} SHARED
     ../../plugins/interfaces/utils.h
     ../../plugins/interfaces/qlcserviceplugin.h
     ../../plugins/interfaces/qlcrdmservice.h
+    aiagent.cpp aiagent.h
     avolitesd4parser.cpp avolitesd4parser.h
     bus.cpp bus.h
     channelmodifier.cpp channelmodifier.h
@@ -86,6 +87,7 @@ target_link_libraries(${module_name} PUBLIC
     Qt${QT_MAJOR_VERSION}::Core
     Qt${QT_MAJOR_VERSION}::Gui
     Qt${QT_MAJOR_VERSION}::Multimedia
+    Qt${QT_MAJOR_VERSION}::Network
 )
 
 target_link_libraries(${module_name} PRIVATE qlcplusaudio)

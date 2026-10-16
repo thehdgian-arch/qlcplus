@@ -31,7 +31,9 @@
 #include "doc.h"
 
 class QProgressDialog;
+class AIAgentDock;
 class VideoProvider;
+class AIAgent;
 class QMessageBox;
 class QToolButton;
 class QFileDialog;
@@ -205,6 +207,16 @@ private:
 
 private:
     QToolBar* m_toolbar;
+
+    /*********************************************************************
+     * AI agent
+     *********************************************************************/
+private:
+    void initAIAgent();
+
+private:
+    AIAgent* m_aiAgent;
+    AIAgentDock* m_aiDock;
 
     /*********************************************************************
      * Utilities

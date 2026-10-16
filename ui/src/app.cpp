@@ -30,6 +30,8 @@
 
 #include "functionliveeditdialog.h"
 #include "inputoutputmanager.h"
+#include "aiagentdock.h"
+#include "aiagent.h"
 #include "functionselection.h"
 #include "functionmanager.h"
 #include "inputoutputmap.h"
@@ -130,6 +132,9 @@ App::App()
 
     , m_toolbar(NULL)
 
+    , m_aiAgent(NULL)
+    , m_aiDock(NULL)
+
     , m_dumpProperties(NULL)
     , m_videoProvider(NULL)
 {
@@ -174,6 +179,13 @@ App::~App()
 
     if (m_videoProvider != NULL)
         delete m_videoProvider;
+
+    /* The agent unregisters its DMX source from the Doc's master timer,
+     * so it must go before the Doc does */
+    delete m_aiDock;
+    m_aiDock = NULL;
+    delete m_aiAgent;
+    m_aiAgent = NULL;
 
     if (m_doc != NULL)
         delete m_doc;
@@ -277,6 +289,8 @@ void App::init()
     initDoc();
     // Main view actions
     initActions();
+    // AI agent dock (hidden until toggled from the tool bar)
+    initAIAgent();
     // Main tool bar
     initToolBar();
 
@@ -778,6 +792,20 @@ void App::initActions()
     }
 }
 
+void App::initAIAgent()
+{
+    Q_ASSERT(m_doc != NULL);
+
+    m_aiAgent = new AIAgent(m_doc, this);
+    m_aiDock = new AIAgentDock(m_aiAgent, this);
+    addDockWidget(Qt::RightDockWidgetArea, m_aiDock);
+    m_aiDock->hide();
+
+    QAction *toggle = m_aiDock->toggleViewAction();
+    toggle->setText(tr("AI Agent"));
+    toggle->setToolTip(tr("Show or hide the AI agent chat"));
+}
+
 void App::initToolBar()
 {
     m_toolbar = new QToolBar(tr("Workspace"), this);
@@ -793,6 +821,8 @@ void App::initToolBar()
     m_toolbar->addSeparator();
     m_toolbar->addAction(m_controlMonitorAction);
     m_toolbar->addAction(m_addressToolAction);
+    if (m_aiDock != NULL)
+        m_toolbar->addAction(m_aiDock->toggleViewAction());
     m_toolbar->addSeparator();
     m_toolbar->addAction(m_controlFullScreenAction);
     m_toolbar->addAction(m_helpIndexAction);

@@ -24,6 +24,7 @@ endif()
 add_library(${module_name}
     SHARED
     aboutbox.cpp aboutbox.h aboutbox.ui
+    aiagentdock.cpp aiagentdock.h
     addchannelsgroup.cpp addchannelsgroup.h addchannelsgroup.ui
     addfixture.cpp addfixture.h addfixture.ui
     addresstool.cpp addresstool.h addresstool.ui
